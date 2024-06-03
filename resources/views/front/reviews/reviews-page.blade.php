@@ -7,6 +7,14 @@
             
         @include('front.books.sidebar')
         <div class="col-md-9">
+
+            @if(Session::has('success'))
+            <p>{{ Session::get('success') }}</p>
+            @endif
+
+            @if(Session::has('error'))
+            <p>{{ Session::get('error') }}</p>
+            @endif
                 
             <div class="card border-0 shadow">
                 <div class="card-header  text-white">
@@ -51,9 +59,9 @@
                                     <td>Block</td>
                                     @endif
                                     <td>
-                                        <a href="edit-review.html" class="btn btn-primary btn-sm"><i class="fa-regular fa-pen-to-square"></i>
+                                        <a href="{{ route('book.editReview',$review->id) }}" class="btn btn-primary btn-sm"><i class="fa-regular fa-pen-to-square"></i>
                                         </a>
-                                        <a href="#" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                        <a href="#" onclick="deleteReview({{ $review->id }})" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -66,5 +74,39 @@
                 
             </div>                
         </div>
+
+@endsection
+
+@section('customJs')
+
+<script type="text/javascript">
+
+function deleteReview(id) {
+    if(confirm('are you sure ?')){
+        $.ajax({
+            url: "{{ route('book.deleteReview',$review->id) }}",
+            type: "delete",
+            data: {id : id},
+            dataType: 'json',
+            success: function(response){
+                if(response.status == true){
+                    window.location.href = "{{ route('book.reviews') }}";
+
+                }
+
+            }
+
+        });
+    }
+    
+}
+
+
+
+
+
+</script>
+
+
 
 @endsection

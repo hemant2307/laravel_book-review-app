@@ -135,7 +135,6 @@ class accountController extends Controller
                     'errors' => $validator->errors()
                 ]);
             }
-
    }
    
    
